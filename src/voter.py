@@ -20,7 +20,7 @@ class VoterModel():
 
         self.voters = Voters(N, c)
         self.network = Voters_net(self.voters, q, p)
-        print(self.network)
+        #print(self.network)
 
     def run_simulation(self) -> None:
         """
@@ -54,6 +54,8 @@ class VoterModel():
         plt.title(f"Concentration over time (N={self.N}, q={self.q}, p={self.p}, M={self.M})")
         plt.savefig('results/concentration{}{}.png'.format(self.q, self.p))
 
-
-test = VoterModel(10, 2, 0.1, 1, 0.5)
-test.run_simulation()
+    def get_final_concentration(self) -> float:
+        """
+        Returns the final concentration
+        """
+        return self.c_values[-1]

@@ -1,12 +1,13 @@
 import voter
+import analysis
+import numpy as np
 
 def main():
-    # Create a voter object
-    v = voter.VoterModel(100, 8, 0.09, 1000, 0.5)
-    # Run the simulation
-    v.run_simulation()
-    # Draw the concentration
-    v.draw_concentration()
+    # v = voter.VoterModel(100, 7, 0.09, 1000, 0.5)
+    # v.run_simulation()
+    # v.draw_concentration()
+    p_values = np.arange(0.075, 0.105, 0.001)
+    analysis.analyze_parameter_p(p_values, 100, 8, 500, 0.5, 50)
 
 if __name__ == "__main__":
     main()

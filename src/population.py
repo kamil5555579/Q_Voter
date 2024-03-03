@@ -1,6 +1,5 @@
 import numpy as np
 
-
 class Voters:
     def __init__(self, size: int, initial_c: float):
         self.voters = np.ones(size)
