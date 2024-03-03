@@ -1,7 +1,7 @@
 import numpy as np
 from population import Voters, Voters_net 
 from progressbar import progressbar
-
+import matplotlib.pyplot as plt
 
 class VoterModel():
     def __init__(self, N: int, q: int, p: float, M: int, c: float) -> None:
@@ -27,7 +27,10 @@ class VoterModel():
         Runs the voter model simulation
         """
         print(f"Running simulation with N={self.N}, q={self.q}, p={self.p}, M={self.M}")
-        for _ in range(self.M): #progressbar(range(self.M), redirect_stdout=True):
+
+        c_values = np.zeros(self.M)
+
+        for step in range(self.M): #progressbar(range(self.M), redirect_stdout=True):
             rng = np.random.default_rng()
             random_indexes = rng.choice(
                 self.N, 
@@ -36,6 +39,20 @@ class VoterModel():
             for i in random_indexes:
                 self.voters.try_to_change_opinion_of(i, self.network)
                 #print(self.voters)
+            
+            c_values[step] = self.voters.get_c()
+
+        self.c_values = c_values
+
+    def draw_concentration(self) -> None:
+        """
+        Draws the concentration over time
+        """
+        plt.plot(self.c_values)
+        plt.xlabel("Monte Carlo steps")
+        plt.ylabel("Concentration")
+        plt.title(f"Concentration over time (N={self.N}, q={self.q}, p={self.p}, M={self.M})")
+        plt.savefig('results/concentration{}{}.png'.format(self.q, self.p))
 
 
 test = VoterModel(10, 2, 0.1, 1, 0.5)
