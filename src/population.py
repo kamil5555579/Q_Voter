@@ -77,12 +77,12 @@ class Voters_net:
             match voters_opinion:
                 case -1:
                     if lobby_consensus == 1:
-                        if np.random.random_sample() < (1 - self.p):
-                            result = True
+                        #if np.random.random_sample() < (1 - self.p): # wydaje mi sie ze tu już jest podwójne sprawdzanie
+                        result = True
                 case 1:
                     if lobby_consensus == -1:
-                        if np.random.random_sample() < (1 - self.p):
-                            result = True
+                        #if np.random.random_sample() < (1 - self.p): # tak samo tu
+                        result = True
 
         return result
             
