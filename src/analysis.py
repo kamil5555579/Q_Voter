@@ -15,7 +15,7 @@ def run_once(N, q, p, M, c, R_idx):
             
 
 
-def analyze_parameter_p(p: Sequence[float], N: int, q: int, M: int, c: float, R: int) -> None:
+def analyze_parameter_p(p: Sequence[float], N: int, q: int, M: int, c: float, R: int, with_polarization: bool = False) -> None:
     """
     Analyzes the parameter p
     :param p: Array of p values
@@ -24,6 +24,7 @@ def analyze_parameter_p(p: Sequence[float], N: int, q: int, M: int, c: float, R:
     :param M: Number of Monte Carlo steps
     :param c: Initial concentration of 1s
     :param R: Number of repetitions for each p value
+    :param with_polarization: Compare polarized intialization with random initialization
     """
 
     mean_magnetization_values = np.zeros(len(p))
@@ -40,9 +41,29 @@ def analyze_parameter_p(p: Sequence[float], N: int, q: int, M: int, c: float, R:
         
         mean_magnetization_values[idx] = np.mean(magnetization_values)
 
-    plt.plot(p, mean_magnetization_values)
+    plt.plot(p, mean_magnetization_values, label='random initialization')
     plt.xlabel("p")
     plt.ylabel("|m|")
     plt.title(f"Magnetization over p (N={N}, q={q}, M={M})")
+
+    if with_polarization: # do the same with polarization/concentration equal to 1
+
+        mean_magnetization_values = np.zeros(len(p))
+
+    for idx, p_value in enumerate(p):
+
+        magnetization_values = np.zeros(R)
+
+        with ProcessPoolExecutor(max_workers=multiprocessing.cpu_count()) as executor:
+            futures = [executor.submit(run_once, N, q, p_value, M, 1, R_idx) for R_idx in range(R)]
+            for future in as_completed(futures):
+                R_idx, m = future.result()
+                magnetization_values[R_idx] = m
+        
+        mean_magnetization_values[idx] = np.mean(magnetization_values)
+
+    plt.plot(p, mean_magnetization_values, label='polarized initialization')
+    plt.legend()
+
     plt.savefig('results/magnetization_p{}{}.png'.format(q, N))
 
