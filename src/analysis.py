@@ -6,7 +6,7 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 import multiprocessing
 
 def run_one_p(N, q, p, M, c, p_idx):
-    v = VoterModel(N, q, p, M, c)
+    v = VoterModel(N, q, p, M, c, ["random regular graph", 5])
     v.run_simulation()
     last_values = int(M/2)
     c_last_values = v.c_values[-last_values:]
@@ -15,7 +15,7 @@ def run_one_p(N, q, p, M, c, p_idx):
     return p_idx, m
 
 def run_one_R(N, q, p, M, c, R_idx):
-    v = VoterModel(N, q, p, M, c)
+    v = VoterModel(N, q, p, M, c, ["random regular graph", 50])
     v.run_simulation()
     c = v.get_final_concentration()
     m = np.abs(2 * c - 1)
@@ -75,7 +75,7 @@ def analyze_parameter_p(p: Sequence[float], N: int, q: int, M: int, c: float, R:
 
     plt.savefig('results/magnetization_p{}{}.png'.format(q, N))
 
-def analyze_parameter_p_from_single_run(p: Sequence[float], N: int, q: int, M: int, c: float, with_polarization: bool = False) -> None:
+def analyze_parameter_p_from_single_run(p: Sequence[float], N: int, q: int, M: int, c: float, with_polarization: bool = False, ) -> None:
     """
     Analyzes the parameter p
     :param p: Array of p values
