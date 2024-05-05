@@ -8,7 +8,7 @@ import multiprocessing
 def run_one_p(N, q, p, M, c, p_idx):
     v = VoterModel(N, q, p, M, c)
     v.run_simulation()
-    last_values = int(M/2)
+    last_values = int(M/20)
     c_last_values = v.c_values[-last_values:]
     m_last_values = np.abs(2 * c_last_values - 1)
     m = np.mean(m_last_values)
@@ -94,7 +94,7 @@ def analyze_parameter_p_from_single_run(p: Sequence[float], N: int, q: int, M: i
             p_idx, m = future.result()
             mean_magnetization_values[p_idx] = m
 
-    plt.plot(p, mean_magnetization_values, label='random initialization')
+    plt.plot(p, mean_magnetization_values, '-o', label='random initialization')
     plt.xlabel("p")
     plt.ylabel("|m|")
     plt.title(f"Magnetization over p (N={N}, q={q}, M={M})")
@@ -109,7 +109,7 @@ def analyze_parameter_p_from_single_run(p: Sequence[float], N: int, q: int, M: i
                 p_idx, m = future.result()
                 mean_magnetization_values[p_idx] = m
 
-        plt.plot(p, mean_magnetization_values, label='polarized initialization')
+        plt.plot(p, mean_magnetization_values, '-o', label='polarized initialization')
         plt.legend()
 
     plt.savefig('results/single_run_magnetization_p{}{}.png'.format(q, N))
