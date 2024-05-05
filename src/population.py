@@ -1,4 +1,6 @@
 import numpy as np
+import networkx as nx
+
 
 class Voters:
     def __init__(self, size: int, initial_c: float):
@@ -36,7 +38,7 @@ class Voters:
 
 
 class Voters_net:
-    def __init__(self, voters, q: int, p: float, connection_type: str = "all connected"):
+    def __init__(self, voters, q: int, p: float, connection_type: str = "all connected", args=[]):
         self.voters = voters
         self.q = q
         self.p = p
@@ -46,6 +48,11 @@ class Voters_net:
             self.network = np.ones([size, size], dtype=bool)
             for i in range(size):
                 self.network[i,i] = None
+        elif connection_type == "random regular graph":
+            # args[1] - amount of connections one node has from 3 to size
+            G = nx.random_regular_graph(args[1], size)
+            self.network = nx.to_numpy_array(G, dtype=bool)
+
 
     def lobby_consensus(self, voters_index: int):
         rng = np.random.default_rng()

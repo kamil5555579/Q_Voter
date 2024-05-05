@@ -6,7 +6,7 @@ import networkx as nx
 import matplotlib.animation as animation
 
 class VoterModel():
-    def __init__(self, N: int, q: int, p: float, M: int, c: float) -> None:
+    def __init__(self, N: int, q: int, p: float, M: int, c: float, args=["all connected"]) -> None:
         """
         Initializes a voter model object
         :param N: Number of voters
@@ -14,6 +14,7 @@ class VoterModel():
         :param p: Probability of independent voting
         :param M: Number of Monte Carlo steps
         :param c: Initial concentration of 1s
+        :args: [ "name of connection type", parameters for this type ]
         """
         self.N = N
         self.q = q
@@ -21,7 +22,7 @@ class VoterModel():
         self.M = M
 
         self.voters = Voters(N, c)
-        self.network = Voters_net(self.voters, q, p)
+        self.network = Voters_net(self.voters, q, p, args[0], args)
         #print(self.network)
 
     def run_simulation(self) -> None:
