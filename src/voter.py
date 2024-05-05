@@ -53,6 +53,7 @@ class VoterModel():
         """
         Draws the concentration over time
         """
+        fig, ax = plt.subplots(figsize=(10, 5))
         plt.plot(self.c_values)
         plt.xlabel("Monte Carlo steps")
         plt.ylabel("Concentration")
